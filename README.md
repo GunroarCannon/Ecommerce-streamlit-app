@@ -73,13 +73,14 @@ analytics/       --> SQL / Python notebooks
 ## Data Modeling
 
 ### Example: Star Schema
-
-
-          dim_date
+```
+        dim_date
             |
 dim_customer -- fact_sales -- dim_product
             |
         dim_supplier
+```
+
 
 
 ### Dimension Table Example
