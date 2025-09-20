@@ -85,21 +85,23 @@ dim_customer -- fact_sales -- dim_product
 
 ### Dimension Table Example
 
+```
 python
 # Load products dimension
 products_df['StockCode'] = products_df['StockCode'].str.upper().str.strip()
 products_df['Description'] = products_df['Description'].fillna('No description')
 products_df.drop_duplicates(subset=['StockCode'], inplace=True)
-
+```
 
 ### Fact Table Example
 
+```
 python
 transactions_df['date_key'] = pd.to_datetime(transactions_df['InvoiceDate']).dt.strftime('%Y%m%d').astype(int)
 transactions_df['customer_key'] = transactions_df['CustomerID'].map(customer_dict)
 transactions_df['product_key'] = transactions_df['StockCode'].map(product_dict)
 transactions_df['revenue'] = transactions_df['Quantity'] * transactions_df['UnitPrice']
-
+```
 
 ---
 
@@ -139,6 +141,7 @@ Example SQL queries:
 
 ### Multi-Level Cohort Analysis
 
+```
 sql
 SELECT
     strftime('%Y-%m', i.InvoiceDate) AS cohort_month,
@@ -147,24 +150,25 @@ FROM fact_sales f
 JOIN dim_customer c ON f.customer_key = c.customer_key
 JOIN dim_date i ON f.date_key = i.date_key
 GROUP BY cohort_month;
-
+```
 
 ### Inventory Management
 
+```
 sql
 SELECT p.stock_code, p.description, SUM(f.quantity) AS total_sold
 FROM fact_sales f
 JOIN dim_product p ON f.product_key = p.product_key
 GROUP BY p.stock_code
 ORDER BY total_sold DESC;
-
+```
 
 ### RFM Segmentation
 
 * *Recency:* Days since last purchase
 * *Frequency:* Total number of orders
 * *Monetary:* Total revenue
-
+```
 python
 rfm = transactions_df.groupby('customer_key').agg({
     'InvoiceDate': lambda x: (pd.Timestamp.now() - x.max()).days,
@@ -172,13 +176,14 @@ rfm = transactions_df.groupby('customer_key').agg({
     'revenue': 'sum'
 }).rename(columns={'InvoiceDate':'Recency','InvoiceNo':'Frequency','revenue':'Monetary'})
 
-
+```
 ---
 
 ## Dashboard and Visualization
 
 Streamlit app for business stakeholders:
 
+```
 python
 import streamlit as st
 import plotly.express as px
@@ -208,14 +213,14 @@ st.markdown(
     </style>
     """, unsafe_allow_html=True
 )
-
+```
 
 ---
 
 ## Authentication
 
 Using streamlit-authenticator:
-
+```
 python
 import streamlit_authenticator as stauth
 
@@ -225,7 +230,7 @@ credentials = {
 
 authenticator = stauth.Authenticate(credentials, "cookie_name", "signature_key", cookie_expiry_days=1)
 name, authentication_status, username = authenticator.login("Login", "main")
-
+```
 
 * Only authenticated users can view dashboards
 
