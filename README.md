@@ -237,7 +237,6 @@ name, authentication_status, username = authenticator.login("Login", "main")
 ---
 
 ## Setup Instructions
-# Project Name
 
 This project uses **Python** and **Streamlit** to run an interactive web application.
 
@@ -298,7 +297,7 @@ deactivate
 
 ---
 
-## Future Improvements
+## Future Improvements (Maybe)
 
 * Automate *daily batch loads* via cron or Airflow
 * Add *churn prediction* and *demand forecasting models*
